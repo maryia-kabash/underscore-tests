@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mocha/2.1.0/mocha.css">
+    <title>Underscore.js tests with Mocha and Chai</title>
+</head>
+<body>
+    <div id="mocha"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/2.1.0/mocha.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/2.0.0/chai.js"></script>
+    <script src="js/blanket.min.js" data-cover-adapter="tests/mocha-blanket.js"></script>
+    <script>mocha.setup('bdd');</script>
+    <script src="js/chai-spies.js"></script>
+    <script>
+        var assert = chai.assert,
+            should = chai.should(),
+            expect = chai.expect;
+    </script>
+    <script src="js/underscore.js" data-cover></script>
+
+    <script src="tests/array-tests.js"></script>
+    <script src="tests/collections-tests.js"></script>
+    <script src="tests/function-tests.js"></script>
+    <script src="tests/objects-tests.js"></script>
+
+    <script>mocha.run();</script>
+</body>
+</html>
