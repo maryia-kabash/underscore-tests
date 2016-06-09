@@ -2,19 +2,19 @@
 *
 * Functions
  + bind
- - bindAll
+ + bindAll
  + partial
- - memoize
- + delay
+    - memoize
+    + delay
  + defer
- - throttle
- - debounce
+    - throttle
+    - debounce
  + once
- - after
- - before
- - wrap
- - negate
- - compose
+    - after
+    - before
+    - wrap
+    - negate
+    - compose
 
  */
 
@@ -34,11 +34,34 @@ describe("_.bind(function, object, *arguments)", function() {
         }
     });
 });
-describe.skip("_.bindAll(object, *methodNames)", function() {
+describe("_.bindAll(object, *methodNames)", function() {
     it("Binds a number of methods on the object, specified by methodNames, to be run in the context of that object whenever they are invoked.", function(){
+        var bindObj = {
+            number: 12,
+            click: function(){
+                return this.number + 1
+            },
+            hover: function(){
+                return this.number - 1
+            },
+            object: {
+                name: "Alice",
+                age: 32
+            }
+        };
+        var fn = bindObj.click;
+        var fn2 = bindObj.hover;
 
+        assert(isNaN(fn()));
+        assert(isNaN(fn2()));
+
+        _.bindAll(bindObj, 'click', 'hover');
+
+        fn = bindObj.click;
+        fn2 = bindObj.hover;
+        assert.equal(fn(), 13);
+        assert.equal(fn2(), 11);
     });
-    it("", function(){});
 });
 describe("_.partial(function, *arguments) ", function() {
     it("Partially apply a function by filling in any number of its arguments, without changing its dynamic this value.", function(){
@@ -57,10 +80,20 @@ describe("_.partial(function, *arguments) ", function() {
     });
 });
 describe("_.memoize(function, [hashFunction]) ", function() {
+
+    var fn = function (obj){
+       console.log(obj);
+    };
+    var memoizedFn = _.memoize(fn);
+
+    memoizedFn({"id":"1"}); // we will get result, and result is cahced now
+
+    memoizedFn({"id":"2"}); // we will get cached result which is wrong
+
     it("", function(){});
     it("", function(){});
 });
-describe.skip("_.delay(function, wait, *arguments) ", function() {
+describe("_.delay(function, wait, *arguments) ", function() {
     var a = 0, b = 0;
     _.delay(function(){a = 3}, 1000);
     _.delay(function(a){return b = a}, 1000, 5);

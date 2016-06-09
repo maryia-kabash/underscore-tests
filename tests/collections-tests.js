@@ -121,21 +121,25 @@ describe("_.map", function() {
 });
 describe("_.reduce(list, iteratee, [memo], [context])", function() {
     it("Boils down a list of values into a single value. The iteratee is passed 4 arguments: the memo, the value, index (or key) of the iteration, and a reference to the entire list.", function(){
-        var word = _.reduce(StringArray, function(memo, value){return memo + value}, 'Word:');
+        var StringArr = ['a', 'b', 'c', 'd', 'e', 'f'];
+        var word = _.reduce(StringArr, function(memo, value){return memo + value}, 'Word:');
         assert.equal(word, 'Word:abcdef');
     });
     it("If no memo is passed to the initial invocation of reduce, the iteratee is not invoked on the first element of the list. " +
     "The first element is instead passed as the memo in the invocation of the iteratee on the next element in the list.", function(){
-        var number = _.reduce(NumberArray, function(memo, value){return memo + value});
+        var NumberArr = [1, 2, 3, 4, 5, 6, 7, 8, 9 , 10];
+        var number = _.reduce(NumberArr, function(memo, value){return memo + value});
         assert.equal(number, 55)
     });
 });
 describe("_.reduceRight", function() {
     it("The right-associative version of reduce", function(){
-        var word = _.reduceRight(StringArray, function(memo, value){return memo + value}, 'Word:');
+        var StringArr = ['a', 'b', 'c', 'd', 'e', 'f'];
+        var word = _.reduceRight(StringArr, function(memo, value){return memo + value}, 'Word:');
         assert.equal(word, 'Word:fedcba');
 
-        var number = _.reduceRight(NumberArray, function(memo, value){return memo - value});
+        var NumberArr = [1, 2, 3, 4, 5, 6, 7, 8, 9 , 10];
+        var number = _.reduceRight(NumberArr, function(memo, value){return memo - value});
         assert.equal(number, -35)
     })
 });
@@ -530,6 +534,7 @@ describe("_.sample", function() {
 
         it("The sample value is from the array passed to the function", function(){
             assert.includeMembers(array, [_.sample(array)]);
+            assert.includeMembers(array, _.sample(array, 2));
         })
 
     })

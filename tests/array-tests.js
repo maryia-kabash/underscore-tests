@@ -113,7 +113,7 @@ describe("_.last", function() {
     });
 
     it("Passing n will return the last n elements of the array", function(){
-
+        expect(_.last(NumberArray, 2)).to.include.members([9, 10]);
     })
 });
 describe("_.rest", function() {
@@ -278,6 +278,13 @@ describe("_.object", function() {
         NamesArray.push('Carl');
         SurnamesArray.push('The Great');
         assert.equal(_.object(NamesArray, SurnamesArray)['Carl'], 'The Great');
+    });
+
+    it("Also works with only one array passed", function(){
+        assert.equal(_.object(NamesArray)['A'], 'l');
+        assert.equal(_.object(NamesArray)['T'], 'i');
+        assert.equal(_.object(NamesArray)['J'], 'i');
+        assert.equal(_.object(NamesArray)['C'], 'a');
     });
 });
 describe("_.indexOf", function() {
