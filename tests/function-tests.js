@@ -5,16 +5,16 @@
  + bindAll
  + partial
     - memoize
-    + delay
+ + delay
  + defer
-    - throttle
+ + throttle
     - debounce
  + once
-    - after
-    - before
-    - wrap
-    - negate
-    - compose
+ + after
+ + before
+ + wrap
+ + negate
+ + compose
 
  */
 
@@ -82,15 +82,22 @@ describe("_.partial(function, *arguments) ", function() {
 describe("_.memoize(function, [hashFunction]) ", function() {
 
     var fn = function (obj){
-       console.log(obj);
+       return(obj);
     };
     var memoizedFn = _.memoize(fn);
 
-    memoizedFn({"id":"1"}); // we will get result, and result is cahced now
 
-    memoizedFn({"id":"2"}); // we will get cached result which is wrong
 
-    it("", function(){});
+    it("Memoizes a given function by caching the computed result.", function(){
+        var m1 = memoizedFn(1); // we will get result, and result is cahced now
+        var m2 = memoizedFn(2); // we will get cached result which is wrong
+
+        assert.equal(m1, 1);
+        assert.equal(m2, 1);
+    });
+    it(" If passed an optional hashFunction, it will be used to compute the hash key for storing the result, based on the arguments to the original function. The default hashFunction just uses the first argument to the memoized function as the key.", function(){
+
+    });
     it("", function(){});
 });
 describe("_.delay(function, wait, *arguments) ", function() {
@@ -138,12 +145,57 @@ describe("_.defer(function, *arguments) ", function() {
     });
 });
 describe("_.throttle(function, wait, [options])", function() {
-    it("", function(){});
-    it("", function(){});
+    it("Creates and returns a new, throttled version of the passed function, that, when invoked repeatedly, will only actually call the original function at most once per every wait milliseconds. ", function(done){
+        var c = 0;
+        var incr = function(){ c++; };
+        var throttled = _.throttle(incr, 32);
+        throttled();
+        throttled();
+
+        assert.equal(c, 1);
+        _.delay(function(){
+            assert.equal(c, 2);
+            done();
+        }, 64);
+    });
 });
 describe("_.debounce(function, wait, [immediate]) ", function() {
-    it("", function(){});
-    it("", function(){});
+
+    it("Creates and returns a new debounced version of the passed function which will postpone its execution until after wait milliseconds have elapsed since the last time it was invoked.", function(done){
+        var c = 0;
+        var recalc = function(){
+            c++;
+        };
+
+        var deb = _.debounce(recalc, 10);
+        deb();deb();
+        setTimeout(function(){
+            deb();
+            assert.equal(c, 1);
+            done();
+        }, 20);
+    });
+    it("At the end of the wait interval, the function will be called with the arguments that were passed most recently to the debounced function.", function(done){
+        var n = "";
+        var recalc1 = function(name){
+            n = name;
+        };
+
+        var deb1 = _.debounce(recalc1, 10);
+        deb1('Alice');
+        deb1("Pete");
+        deb1("Bob");
+
+        setTimeout(function(){
+            assert.equal(n, 'Bob');
+            deb1("Ron");
+            assert.equal(n, 'Ron');
+            done();
+        }, 20);
+    });
+    it("Pass true for the immediate argument to cause debounce to trigger the function on the leading instead of the trailing edge of the wait interval. Useful in circumstances like preventing accidental double-clicks on a submit button from firing a second time.", function(){
+
+    });
 });
 describe("_.once(function) ", function() {
 
@@ -168,24 +220,77 @@ describe("_.once(function) ", function() {
     });
 });
 describe("_.after(count, function) ", function() {
-    it("", function(){});
-    it("", function(){});
+    var spy = chai.spy();
+
+    function after(a, b){
+        spy();
+        return a+b;
+    }
+
+    var sumOnce = _.after(3, after);
+
+    var res1 = sumOnce(2,1);
+    var res2 = sumOnce(5,1);
+    var res3 = sumOnce(1,1);
+    it("Creates a version of the function that will only be run after first being called count times.", function(){
+        expect(spy).to.have.been.called.once;
+        assert.isUndefined(res1);
+        assert.isUndefined(res2);
+
+    });
 });
 describe("_.before(count, function)", function() {
-    it("", function(){});
-    it("", function(){});
+    it("Creates a version of the function that can be called no more than count times. ", function(){
+        var c = 0;
+        function max3(){
+            c++;
+        }
+        var before = _.before(3, max3);
+        before();
+        before();
+        before();
+        before();
+
+        assert.equal(c, 2);
+    });
 });
 describe("_.wrap(function, wrapper) ", function() {
-    it("", function(){});
-    it("", function(){});
+    it("Wraps the first function inside of the wrapper function, passing it as the first argument. This allows the wrapper to execute code before and after the function runs, adjust the arguments, and execute it conditionally.", function(){
+        var hello = function(name) { return "hello: " + name; };
+        hello = _.wrap(hello, function(func) {
+            return "before, " + func("moe") + ", after";
+        });
+        var res = hello();
+        assert.equal(res, "before, hello: moe, after");
+    });
 });
 describe("_.negate(predicate) ", function() {
-    it("", function(){});
-    it("", function(){});
+    it("Returns a new negated version of the predicate function.", function(){
+        var toNegative = function(num){
+            return num * -1;
+        };
+
+        var toPositive = _.negate(toNegative);
+
+        assert.equal(toPositive(0), true);
+        assert.equal(toPositive(false), true);
+        assert.equal(toPositive(""), true);
+        assert.equal(toPositive(true), false);
+    });
 });
 describe("_.compose(*functions)", function() {
-    it("", function(){});
-    it("", function(){});
+    it("Returns the composition of a list of functions, where each function consumes the return value of the function that follows.", function(){
+        var hello = function (name){
+            return "Hello, " + name;
+        };
+        var  whatsup = function (greeting) {
+            return greeting + "! What's up?";
+        };
+        var dialogue = _.compose(hello, whatsup);
+
+        assert.equal(dialogue('World'), "Hello, World! What's up?");
+        assert.equal(dialogue('Jessi'), "Hello, Jessi! What's up?");
+    });
 });
 
 //Helpers
