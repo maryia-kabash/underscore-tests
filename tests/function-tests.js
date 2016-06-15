@@ -4,11 +4,11 @@
  + bind
  + bindAll
  + partial
-    - memoize
+ + memoize
  + delay
  + defer
  + throttle
-    - debounce
+ + debounce
  + once
  + after
  + before
@@ -80,25 +80,25 @@ describe("_.partial(function, *arguments) ", function() {
     });
 });
 describe("_.memoize(function, [hashFunction]) ", function() {
-
-    var fn = function (obj){
-       return(obj);
-    };
-    var memoizedFn = _.memoize(fn);
-
-
+    var funcCalls = 0;
+    function fibonacci(n) {
+        funcCalls++;
+        if (n === 0 || n === 1)
+            return n;
+        else
+            return fibonacci(n - 1) + fibonacci(n - 2);
+    }
 
     it("Memoizes a given function by caching the computed result.", function(){
-        var m1 = memoizedFn(1); // we will get result, and result is cahced now
-        var m2 = memoizedFn(2); // we will get cached result which is wrong
+        assert.equal(fibonacci(15), 610);
+        var n = funcCalls;
+        funcCalls = 0;
+        fibonacci = _.memoize(fibonacci);
+        assert.equal(fibonacci(15), 610);
+        var m = funcCalls;
 
-        assert.equal(m1, 1);
-        assert.equal(m2, 1);
+        assert.isAbove(n, m);
     });
-    it(" If passed an optional hashFunction, it will be used to compute the hash key for storing the result, based on the arguments to the original function. The default hashFunction just uses the first argument to the memoized function as the key.", function(){
-
-    });
-    it("", function(){});
 });
 describe("_.delay(function, wait, *arguments) ", function() {
     var a = 0, b = 0;
@@ -160,39 +160,40 @@ describe("_.throttle(function, wait, [options])", function() {
     });
 });
 describe("_.debounce(function, wait, [immediate]) ", function() {
+    var c = 0, n = "";
+    var recalc = function(name){ c++; n = name || ""; };
 
     it("Creates and returns a new debounced version of the passed function which will postpone its execution until after wait milliseconds have elapsed since the last time it was invoked.", function(done){
-        var c = 0;
-        var recalc = function(){
-            c++;
-        };
+        var deb = _.debounce(recalc, 32);
+        deb('Alice');
+        deb('Pete');
 
-        var deb = _.debounce(recalc, 10);
-        deb();deb();
+        assert.equal(c, 0);
+        assert.equal(n, '');
+
+        deb('Ron');
         setTimeout(function(){
-            deb();
             assert.equal(c, 1);
-            done();
-        }, 20);
-    });
-    it("At the end of the wait interval, the function will be called with the arguments that were passed most recently to the debounced function.", function(done){
-        var n = "";
-        var recalc1 = function(name){
-            n = name;
-        };
-
-        var deb1 = _.debounce(recalc1, 10);
-        deb1('Alice');
-        deb1("Pete");
-        deb1("Bob");
-
-        setTimeout(function(){
-            assert.equal(n, 'Bob');
-            deb1("Ron");
             assert.equal(n, 'Ron');
             done();
-        }, 20);
+        }, 64);
     });
+
+    //it("At the end of the wait interval, the function will be called with the arguments that were passed most recently to the debounced function.", function(done){
+    //    var deb1 = _.debounce(recalc, 32);
+    //    deb1('Alice');
+    //    deb1("Pete");
+    //    deb1("Bob");
+    //    assert.equal(n, '');
+    //
+    //    setTimeout(function(){
+    //
+    //        deb1("Ron");
+    //        assert.equal(n, 'Ron');
+    //        done();
+    //    }, 64);
+    //});
+
     it("Pass true for the immediate argument to cause debounce to trigger the function on the leading instead of the trailing edge of the wait interval. Useful in circumstances like preventing accidental double-clicks on a submit button from firing a second time.", function(){
 
     });
