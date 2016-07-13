@@ -398,12 +398,14 @@ describe("_.min", function() {
 });
 describe("_.sortBy", function() {
     it("Returns a list in ascending order by the results of running each value through iteratee function", function(){
-        assert.equal(_.sortBy([3.6, 4.7, 1.01, 5.5, 2.54, 6.4], function(n){return Math.trunc(n);})[0], 1.01);
-        assert.equal(_.sortBy([3.6, 4.7, 1.01, 5.5, 2.54, 6.4], function(n){return Math.trunc(n);})[1], 2.54);
-        assert.equal(_.sortBy([3.6, 4.7, 1.01, 5.5, 2.54, 6.4], function(n){return Math.trunc(n);})[2], 3.6);
-        assert.equal(_.sortBy([3.6, 4.7, 1.01, 5.5, 2.54, 6.4], function(n){return Math.trunc(n);})[3], 4.7);
-        assert.equal(_.sortBy([3.6, 4.7, 1.01, 5.5, 2.54, 6.4], function(n){return Math.trunc(n);})[4], 5.5);
-        assert.equal(_.sortBy([3.6, 4.7, 1.01, 5.5, 2.54, 6.4], function(n){return Math.trunc(n);})[5], 6.4);
+        var ar = [3.6, 4.7, 1.01, 5.5, 2.54, 6.4];
+        var fnsort = function(n){return Math.floor(n)};
+        assert.equal(_.sortBy(ar, fnsort)[0], 1.01);
+        assert.equal(_.sortBy(ar, fnsort)[1], 2.54);
+        assert.equal(_.sortBy(ar, fnsort)[2], 3.6);
+        assert.equal(_.sortBy(ar, fnsort)[3], 4.7);
+        assert.equal(_.sortBy(ar, fnsort)[4], 5.5);
+        assert.equal(_.sortBy(ar, fnsort)[5], 6.4);
     });
     it("Iteratee may also be the string name of the property to sort by", function(){
         var a = ['abc', 'asfs', 'a', 'qwerty'];

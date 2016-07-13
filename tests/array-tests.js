@@ -210,7 +210,7 @@ describe("_.uniq", function() {
     });
 
     it("If you know in advance that the array is sorted, passing true for isSorted will run a much faster algorithm.", function(){
-        var sorted = [1, 2, 3, 5, 3, 1, '1', 7, 12, 2, 4].sort();
+        var sorted =  [ 1, 1, '1', 12, 2, 3, 4, 5, 7 ];
         expect(_.uniq(sorted, true)).to.include.members([1, 2, 3, 4, 5, '1', 7, 12]);
         assert.lengthOf(_.uniq(sorted, true), 8);
     });

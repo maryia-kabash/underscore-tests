@@ -1,0 +1,41 @@
+{
+  "name": "underscore-tests",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "devDependencies": {
+    "bundle-loader": "^0.5.2",
+    "chai": "^2.2.0",
+    "chai-spies": "^0.7.1",
+    "istanbul": "^0.3.13",
+    "istanbul-instrumenter-loader": "^0.1.2",
+    "karma-chai-spies": "^0.1.4",
+    "karma-coverage": "^0.2.7",
+    "karma-mocha": "^0.1.10",
+    "karma-phantomjs-launcher": "^0.1.4",
+    "karma-spec-reporter": "0.0.18",
+    "karma-webpack": "^1.5.0",
+    "mocha": "^2.2.1",
+    "mocha-loader": "^0.7.1",
+    "phantomjs-polyfill": "0.0.1",
+    "webpack": "^1.4.12",
+    "webpack-dev-server": "^1.6.6"
+  },
+  "scripts": {
+    "test": "node ./node_modules/karma/bin/karma start --single-run --browsers PhantomJS",
+    "test-gulp": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maryia-kabash/underscore-tests.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/maryia-kabash/underscore-tests/issues"
+  },
+  "homepage": "https://github.com/maryia-kabash/underscore-tests#readme"
+}

@@ -319,8 +319,8 @@ describe("_.isEmpty", function() {
 });
 describe("_.isElement", function() {
     it("Returns true if object is a DOM element.", function(){
-        assert.isTrue(_.isElement(document.getElementById('mocha')));
         assert.isFalse(_.isElement(dataMethods));
+        assert.isTrue(_.isElement(document.body));
     });
 });
 describe("_.isArray", function() {
